@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PropTypes as T } from 'react'
 import Map, {GoogleApiWrapper} from 'google-maps-react'
 import {searchNearby} from 'utils/googleApiHelpers'
 import Header from 'components/Header/Header'
@@ -7,8 +7,8 @@ import Sidebar from 'components/Sidebar/Sidebar'
 
 export class Container extends React.Component {
 
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
 
     this.state = {
       places: [],
@@ -36,6 +36,9 @@ export class Container extends React.Component {
   }
 
   onMarkerClick(item) {
+    const {place} = item; // place prop
+    const {push} = this.context.router;
+    push(`/map/detail/${place.place_id}`)
   }
 
   render() {
@@ -71,6 +74,10 @@ export class Container extends React.Component {
       </div>
     )
   }
+}
+
+Container.contextTypes = {
+  router: T.object
 }
 
 export default GoogleApiWrapper({
