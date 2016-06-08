@@ -17,6 +17,7 @@ export class Container extends React.Component {
   }
 
   onReady(mapProps, map) {
+    console.log('onReady')
     const {google} = this.props;
     const opts = {
       location: map.center,
@@ -34,7 +35,26 @@ export class Container extends React.Component {
       })
   }
 
+  onMarkerClick(item) {
+    const {place} = item; // place prop
+    const {push} = this.context.router;
+    push(`/map/detail/${place.place_id}`)
+  }
+
   render() {
+    console.log('children', this.props.children, this.props.google)
+    let children = null;
+    if (this.props.children) {
+      // We have children in the Container component
+      children = React.cloneElement(
+        this.props.children,
+        {
+          google: this.props.google,
+          places: this.state.places,
+          loaded: this.props.loaded,
+          onMarkerClick: this.onMarkerClick.bind(this)
+        });
+    }
     return (
       <div>
         <Map
@@ -47,10 +67,18 @@ export class Container extends React.Component {
             title={'Restaurants'}
             places={this.state.places}
           />
+          <div className={styles.content}>
+            {/* Setting children routes to be rendered*/}
+            {children}
+          </div>
         </Map>
       </div>
     )
   }
+}
+
+Container.contextTypes = {
+  router: React.PropTypes.object
 }
 
 export default GoogleApiWrapper({
