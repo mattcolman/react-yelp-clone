@@ -36,13 +36,9 @@ export class Container extends React.Component {
   }
 
   onMarkerClick(item) {
-    const {place} = item; // place prop
-    const {push} = this.context.router;
-    push(`/map/detail/${place.place_id}`)
   }
 
   render() {
-    console.log('children', this.props.children, this.props.google)
     let children = null;
     if (this.props.children) {
       // We have children in the Container component
@@ -75,10 +71,6 @@ export class Container extends React.Component {
       </div>
     )
   }
-}
-
-Container.contextTypes = {
-  router: React.PropTypes.object
 }
 
 export default GoogleApiWrapper({
